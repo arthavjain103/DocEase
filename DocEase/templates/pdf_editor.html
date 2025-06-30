@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}DocEase - PDF Editor{% endblock %}
+
+{% block head %}
+  <style>
+    .card-glass {
+      max-width: 540px;
+      margin: 60px auto;
+    }
+    .editor-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #60a5fa;
+    }
+    .editor-desc {
+      color: #b6c2d6;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .editor-btn {
+      min-width: 160px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.9rem 2.2rem;
+      margin: 0 1rem 2rem 1rem;
+      background: linear-gradient(90deg, #6366f1 0%, #06b6d4 100%);
+      color: #fff;
+      box-shadow: 0 2px 12px 0 #6366f166;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .editor-btn.active, .editor-btn:focus {
+      background: linear-gradient(90deg, #4f46e5 0%, #0891b2 100%);
+      color: #fff;
+      transform: scale(1.05);
+    }
+    .btn-custom {
+      border-radius: 1.5rem;
+      font-size: 1.1rem;
+    }
+    .form-label, .form-control {
+      color: #e2e8f0;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid #334155;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .form-control:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 0.2rem #6366f155;
+      background: rgba(30, 41, 59, 0.7);
+      color: #fff;
+    }
+    .alert-info {
+      background: rgba(99, 102, 241, 0.08);
+      color: #fff;
+      border: 1px solid #6366f1;
+      border-radius: 1rem;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <main class="container flex-grow-1" style="padding-top: 120px; max-width: 600px;">
+    <div class="card-glass p-4">
+      <div class="text-center mb-3">
+        <div class="editor-title">PDF Editor</div>
+        <div class="editor-desc">Choose a PDF operation below.</div>
+      </div>
+      <div class="d-flex justify-content-center mb-4">
+        <button class="editor-btn active" id="btn-split">Split PDF</button>
+        <button class="editor-btn" id="btn-merge">Merge PDF</button>
+      </div>
+      
+      <div id="content-split" style="display:none;">
+        <form method="post" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <input type="hidden" name="conversion_type" value="split-pdf">
+          <div class="mb-3">
+            {{ form.file.label(class="form-label") }}
+            {{ form.file(class="form-control", accept=".pdf") }}
+            {% if form.file.errors %}
+              {% for error in form.file.errors %}
+                <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="row mb-3">
+            <div class="col-6">
+              <label class="form-label">Start Page</label>
+              <input type="number" name="start_page" class="form-control" min="1" placeholder="1">
+            </div>
+            <div class="col-6">
+              <label class="form-label">End Page</label>
+              <input type="number" name="end_page" class="form-control" min="1" placeholder="All">
+            </div>
+          </div>
+          <div class="alert alert-info mb-3">
+            <i class="bi bi-info-circle"></i>
+            Leave empty to split all pages. Enter page numbers to split specific range.
+          </div>
+          {{ form.submit(class="btn btn-custom w-100") }}
+        </form>
+      </div>
+      <div id="content-merge" style="display:none;">
+        <form method="post" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <input type="hidden" name="conversion_type" value="merge-pdf">
+          <div class="mb-3">
+            <label class="form-label">Select PDF Files (Multiple)</label>
+            <input type="file" name="pdf_files" class="form-control" accept=".pdf" multiple required>
+          </div>
+          <div class="alert alert-info mb-3">
+            <i class="bi bi-info-circle"></i>
+            Select multiple PDF files to merge them into a single PDF. Files will be merged in the order you select them.
+          </div>
+          {{ form.submit(class="btn btn-custom w-100") }}
+        </form>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script>
+    const btnSplit = document.getElementById('btn-split');
+    const btnMerge = document.getElementById('btn-merge');
+    const contentSplit = document.getElementById('content-split');
+    const contentMerge = document.getElementById('content-merge');
+    
+    btnSplit.onclick = function() {
+      btnSplit.classList.add('active');
+      btnMerge.classList.remove('active');
+      contentSplit.style.display = '';
+      contentMerge.style.display = 'none';
+    };
+    
+    btnMerge.onclick = function() {
+      btnSplit.classList.remove('active');
+      btnMerge.classList.add('active');
+      contentSplit.style.display = 'none';
+      contentMerge.style.display = '';
+    };
+  </script>
+{% endblock %}

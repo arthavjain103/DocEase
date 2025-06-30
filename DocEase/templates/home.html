@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}DocEase - Convert Files Effortlessly{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="py-5 mt-5">
+    <div class="container text-center pt-5">
+      <h1 id="hero-title" class="display-4 fw-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-400 mb-5">Transform & Edit Documents Effortlessly</h1>
+      <p id="hero-sub" class="lead text-slate-400 mb-4 max-w-xl mx-auto">
+        Your all-in-one solution for seamless file conversion and PDF editing. Fast, secure, and reliable document processing.
+      </p>
+      <a id="hero-btn" href="/convert" class="btn btn-lg btn-custom px-5 py-3">Get Started</a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-5">
+    <div class="container">
+      <h2 id="features" class="text-center text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-400 mb-4">What Makes Us Powerful</h2>
+      <div class="row g-4">
+        <!-- All-in-One File Converter -->
+        <div class="col-md-4">
+          <div class="p-4 card-glass text-center h-100">
+            <div class="icon-bg"><i class="bi bi-arrow-repeat"></i></div>
+            <div class="feature-title mb-2">All-in-One File Converter</div>
+            <div class="feature-desc mb-3">Convert PDF, Word, Images, and more—seamlessly and in any direction.</div>
+          </div>
+        </div>
+        <!-- Split & Merge PDF -->
+        <div class="col-md-4">
+          <div class="p-4 card-glass text-center h-100">
+            <div class="icon-bg"><i class="bi bi-scissors"></i></div>
+            <div class="feature-title mb-2">Split & Merge PDF</div>
+            <div class="feature-desc mb-3">Easily split large PDFs or merge multiple files into one organized document.</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 card-glass text-center h-100">
+            <div class="icon-bg"><i class="bi bi-lightning-charge"></i></div>
+            <div class="feature-title mb-2">Lightning-Fast Performance</div>
+            <div class="feature-desc mb-3">Experience blazing speed, even with large or complex files.</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 card-glass text-center h-100">
+            <div class="icon-bg"><i class="bi bi-cloud-check"></i></div>
+            <div class="feature-title mb-2">Cloud Ready, Access Anywhere</div>
+            <div class="feature-desc mb-3">Access and process your files from any device, wherever you are.</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 card-glass text-center h-100">
+            <div class="icon-bg"><i class="bi bi-shield-check"></i></div>
+            <div class="feature-title mb-2">Privacy-Focused Processing</div>
+            <div class="feature-desc mb-3">We respect your privacy — your files are never stored or shared.</div>
+          </div>
+        </div>
+        <!-- User Friendly -->
+        <div class="col-md-4">
+          <div class="p-4 card-glass text-center h-100">
+            <div class="icon-bg"><i class="bi bi-emoji-smile"></i></div>
+            <div class="feature-title mb-2">User Friendly</div>
+            <div class="feature-desc mb-3">A simple, intuitive interface that anyone can use—no training required.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    // GSAP Animations
+    gsap.from("#hero-title", {
+      opacity: 0,
+      y: -50,
+      duration: 1
+    });
+    gsap.from("#hero-sub", {
+      opacity: 0,
+      y: 30,
+      duration: 1,
+      delay: 0.5
+    });
+    gsap.from("#hero-btn", {
+      opacity: 0,
+      scale: 0.8,
+      duration: 1,
+      delay: 1
+    });
+  </script>
+{% endblock %}

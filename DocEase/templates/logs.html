@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Conversion History{% endblock %}
+
+{% block content %}
+<style>
+    .glass-table-wrapper {
+        background: rgba(30, 41, 59, 0.55);
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 16px 0 rgba(99, 102, 241, 0.10), 0 1.5px 6px 0 rgba(0,0,0,0.08);
+        padding: 2.5rem 2rem 2rem 2rem;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+    }
+    .glass-table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: transparent;
+    }
+    .glass-table th, .glass-table td {
+        color: #f1f5f9;
+        padding: 0.55rem 0.9rem;
+        border-bottom: 1.5px solid rgba(100, 116, 139, 0.18);
+        vertical-align: middle;
+        font-size: 1.08em;
+    }
+    .glass-table th {
+        background: rgba(51, 65, 85, 0.85);
+        color: #c7d2fe;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-align: left;
+        border-bottom: 2.5px solid #6366f1;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .glass-table tbody tr {
+        transition: none;
+    }
+    .glass-table .gradient-btn {
+        display: inline-block;
+        background: linear-gradient(90deg, #6366f1, #06b6d4);
+        color: #fff !important;
+        font-weight: 600;
+        padding: 0.22em 0.85em;
+        border-radius: 1.2em;
+        box-shadow: 0 1px 4px 0 rgba(99, 102, 241, 0.08);
+        border: none;
+        font-size: 1em;
+        letter-spacing: 0.01em;
+        transition: none;
+        cursor: default;
+        user-select: none;
+        outline: none;
+        border: 1.5px solid rgba(99, 102, 241, 0.18);
+    }
+    .glass-table a {
+        color: #38bdf8;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.18s;
+    }
+    .glass-table a:hover {
+        color: #818cf8;
+        text-decoration: underline;
+    }
+    .container h2 {
+        color: #e0e7ff;
+        font-weight: 700;
+        margin-bottom: 2.2rem;
+        letter-spacing: 0.01em;
+    }
+    .alert.card-glass {
+        background: rgba(30, 41, 59, 0.6);
+        color: #94a3b8;
+        border-radius: 1rem;
+        padding: 1rem 1.5rem;
+        border: 1px solid rgba(100, 116, 139, 0.3);
+    }
+</style>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-xl">Conversion History</h2>
+    <div class="glass-table-wrapper">
+    {% if logs and logs|length > 0 %}
+        <table class="glass-table align-middle">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Filename</th>
+                    <th>Conversion Type</th>
+                    <th>Output File</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ log['filename'] }}</td>
+                    <td><span class="gradient-btn">{{ log['conversion_type']|replace('-', ' ')|title }}</span></td>
+                    <td><a href="/uploads/{{ log['output_file'] }}" target="_blank">{{ log['output_file'] }}</a></td>
+                    <td><i class="bi bi-clock me-1"></i>{{ log['timestamp'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    <div class="alert alert-info card-glass">No conversion history found.</div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

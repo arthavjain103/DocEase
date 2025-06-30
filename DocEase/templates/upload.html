@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}DocEase - Choose Your Tool{% endblock %}
+
+{% block content %}
+  <main class="container d-flex justify-content-center align-items-center flex-column flex-grow-1" style="padding-top: 120px; min-height: 80vh;">
+    <div class="row g-5 w-100" style="max-width: 1000px;">
+      <div class="col-md-6">
+        <div class="p-5 card-glass text-center h-100 shadow-lg" style="border-radius:2rem; min-height:340px; display:flex; flex-direction:column; align-items:center; justify-content:center; background: linear-gradient(135deg, #232946 60%, #6366f1 100%);">
+          <div class="d-flex align-items-center justify-content-center mb-4" style="width:80px; height:80px; border-radius:1.5rem; background: linear-gradient(135deg, #6366f1 60%, #06b6d4 100%); box-shadow: 0 4px 24px 0 rgba(99,102,241,0.18);">
+            <i class="bi bi-arrow-repeat" style="font-size:2.5rem; color:#fff;"></i>
+          </div>
+          <h2 class="fw-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-400 mb-2" style="font-size:2rem;">File Converter</h2>
+          <p class="text-slate-200 mb-4" style="font-size:1.1rem;">Easily convert PDF, Word, Images & more in seconds with high accuracy.</p>
+          <a href="/file-converter" class="btn btn-custom mt-auto px-4 py-2" style="font-size:1.1rem; border-radius:1.5rem;">Try Now</a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="p-5 card-glass text-center h-100 shadow-lg" style="border-radius:2rem; min-height:340px; display:flex; flex-direction:column; align-items:center; justify-content:center; background: linear-gradient(135deg, #232946 60%, #6366f1 100%);">
+          <div class="d-flex align-items-center justify-content-center mb-4" style="width:80px; height:80px; border-radius:1.5rem; background: linear-gradient(135deg, #6366f1 60%, #06b6d4 100%); box-shadow: 0 4px 24px 0 rgba(99,102,241,0.18);">
+            <i class="bi bi-pencil-square" style="font-size:2.5rem; color:#fff;"></i>
+          </div>
+          <h2 class="fw-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-400 mb-2" style="font-size:2rem;">PDF Editor</h2>
+          <p class="text-slate-200 mb-4" style="font-size:1.1rem;">Split, merge, compress, watermark, and organize your PDFs effortlessly.</p>
+          <a href="/pdf-editor" class="btn btn-custom mt-auto px-4 py-2" style="font-size:1.1rem; border-radius:1.5rem;">Try Now</a>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
