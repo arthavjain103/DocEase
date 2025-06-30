@@ -25,7 +25,12 @@
 
 ## 🖼️ Demo
 
-![Screenshot](screenshots/1.png)
+![Screenshot](screenshots/screenshot1.png)
+
+![Screenshot](screenshots/Screenshot2.png)
+
+![Screenshot](screenshots/Screenshot3.png)
+
 
 ---
 
