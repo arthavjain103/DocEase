@@ -25,7 +25,7 @@
 
 ## 🖼️ Demo
 
-![Screenshot](DocEase/screenshots/screenshot11.png)
+![Screenshot](DocEase/screenshots/Screenshot11.png)
 
 ![Screenshot](DocEase/screenshots/Screenshot3.png)
 
