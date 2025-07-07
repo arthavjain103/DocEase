@@ -25,11 +25,11 @@
 
 ## 🖼️ Demo
 
-![Screenshot](screenshots/screenshot1.png)
+![Screenshot](DocEase/screenshots/screenshot1.png)
 
-![Screenshot](screenshots/Screenshot2.png)
+![Screenshot](DocEase/screenshots/Screenshot2.png)
 
-![Screenshot](screenshots/Screenshot3.png)
+![Screenshot](DocEase/screenshots/Screenshot3.png)
 
 
 ---
