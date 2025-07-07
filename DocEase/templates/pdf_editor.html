@@ -55,6 +55,7 @@ block head %}
       <button class="tab-btn active" id="tab-split">Split PDF</button>
       <button class="tab-btn" id="tab-merge">Merge PDF</button>
       <button class="tab-btn" id="tab-encrypt">Encrypt PDF</button>
+      <button class="tab-btn" id="tab-decrypt">Decrypt PDF</button>
     </div>
     <div id="content-split">
       <form method="post" enctype="multipart/form-data">
@@ -147,6 +148,35 @@ block head %}
           open the file.
         </div>
         <button type="submit" class="btn btn-custom w-100">Encrypt PDF</button>
+      </form>
+    </div>
+    <div id="content-decrypt" style="display: none">
+      <form method="post" action="/decrypt" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Select Encrypted PDF File</label>
+          <input
+            type="file"
+            name="pdf"
+            class="form-control"
+            accept=".pdf"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="alert alert-info mb-3">
+          <i class="bi bi-info-circle"></i>
+          Enter the password to decrypt your PDF. The file will be unlocked if
+          the password is correct.
+        </div>
+        <button type="submit" class="btn btn-custom w-100">Decrypt PDF</button>
       </form>
     </div>
   </div>

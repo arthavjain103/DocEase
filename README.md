@@ -1,6 +1,6 @@
 # DocEase: Convert & Edit Your Documents Seamlessly
 
-✨ A modern web app for converting files between PDF, Word, and image formats — and editing PDFs with powerful split & merge tools. Features a clean, responsive design using Bootstrap and Tailwind CSS.
+✨ DocEase is your go-to solution for seamless document handling — convert PDFs, Word docs, and images effortlessly, and edit PDFs with advanced split, merge, and security features. All wrapped in a beautiful, responsive interface built using Tailwind Css and Bootstrap and Gsap animations.
 
 ---
 
@@ -12,6 +12,8 @@
 - **Powerful PDF Editor:**
   - **Split PDF:** Extract specific pages or split entire PDFs into individual files. Outputs can be downloaded as separate PDFs or bundled in a ZIP file.
   - **Merge PDF:** Combine multiple PDF documents into a single, organized file in seconds.
+  - **Encrypt PDF:** Secure your PDF files with a password — required for opening the file.
+  - **Decrypt PDF:** Remove passwords from encrypted PDF files (with correct password provided).
 - **Conversion History:**
   - Every conversion or PDF operation is logged automatically. The app provides a dedicated History page where you can review past actions and re-download files if needed.
 - **Modern UI:**
@@ -31,7 +33,6 @@
 
 ![Screenshot](DocEase/screenshots/Screenshot2.png)
 
-
 ---
 
 ## 🧭 User Flow
@@ -39,8 +40,8 @@
 1. **Landing Page:** Welcome screen with Get Started button
 2. **Choose Action:** Convert files or edit PDFs
 3. **Upload Files:** Select and upload your files
-4. **Process:** Download your converted or edited document
-5. **History:** View/download past conversions
+4. **Process:** Download your converted, encrypted, or edited document
+5. **History:** View/download your personal past conversions
 
 ---
 
@@ -82,7 +83,7 @@
 
 - **Flask:** Web framework for backend and routing
 - **WTForms / Flask-WTF:** Secure forms and file uploads
-- **PyPDF2:** PDF split/merge operations
+- **PyPDF2:** PDF split/merge operations,encrypt, and decrypt operations
 - **pdf2docx / docx2pdf:** PDF ↔ Word conversion
 - **Pillow:** Image to PDF conversion
 - **Bootstrap 5 + Tailwind CSS:** Responsive, modern UI

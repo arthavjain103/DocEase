@@ -26,22 +26,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const tabSplit = document.getElementById('tab-split');
     const tabMerge = document.getElementById('tab-merge');
     const tabEncrypt = document.getElementById('tab-encrypt');
+    const tabDecrypt = document.getElementById('tab-decrypt');
     const contentSplit = document.getElementById('content-split');
     const contentMerge = document.getElementById('content-merge');
     const contentEncrypt = document.getElementById('content-encrypt');
+    const contentDecrypt = document.getElementById('content-decrypt');
 
-    if (tabSplit && tabMerge && tabEncrypt && contentSplit && contentMerge && contentEncrypt) {
+    if (tabSplit && tabMerge && tabEncrypt && tabDecrypt && contentSplit && contentMerge && contentEncrypt && contentDecrypt) {
         tabSplit.addEventListener('click', function() {
-            setActiveTab(tabSplit, [tabMerge, tabEncrypt]);
-            showContent(contentSplit, [contentMerge, contentEncrypt]);
+            setActiveTab(tabSplit, [tabMerge, tabEncrypt, tabDecrypt]);
+            showContent(contentSplit, [contentMerge, contentEncrypt, contentDecrypt]);
         });
         tabMerge.addEventListener('click', function() {
-            setActiveTab(tabMerge, [tabSplit, tabEncrypt]);
-            showContent(contentMerge, [contentSplit, contentEncrypt]);
+            setActiveTab(tabMerge, [tabSplit, tabEncrypt, tabDecrypt]);
+            showContent(contentMerge, [contentSplit, contentEncrypt, contentDecrypt]);
         });
         tabEncrypt.addEventListener('click', function() {
-            setActiveTab(tabEncrypt, [tabSplit, tabMerge]);
-            showContent(contentEncrypt, [contentSplit, contentMerge]);
+            setActiveTab(tabEncrypt, [tabSplit, tabMerge, tabDecrypt]);
+            showContent(contentEncrypt, [contentSplit, contentMerge, contentDecrypt]);
+        });
+        tabDecrypt.addEventListener('click', function() {
+            setActiveTab(tabDecrypt, [tabSplit, tabMerge, tabEncrypt]);
+            showContent(contentDecrypt, [contentSplit, contentMerge, contentEncrypt]);
         });
     }
 
