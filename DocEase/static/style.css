@@ -99,10 +99,14 @@ body {
 }
 .navbar-nav .nav-link {
   transition: color 0.2s, background 0.2s;
+  
 }
 .navbar-nav .nav-link.gradient-hover {
   color: #e2e8f0;
   background: none;
+}
+.nav-link{
+  margin-left :7px;
 }
 .navbar-nav .nav-link.gradient-hover:hover,
 .navbar-nav .nav-link.gradient-hover.active {

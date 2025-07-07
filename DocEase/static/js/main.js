@@ -22,24 +22,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- PDF Editor Buttons ---
-    const btnSplit = document.getElementById('btn-split');
-    const btnMerge = document.getElementById('btn-merge');
+    // --- PDF Editor Tabs ---
+    const tabSplit = document.getElementById('tab-split');
+    const tabMerge = document.getElementById('tab-merge');
+    const tabEncrypt = document.getElementById('tab-encrypt');
     const contentSplit = document.getElementById('content-split');
     const contentMerge = document.getElementById('content-merge');
+    const contentEncrypt = document.getElementById('content-encrypt');
 
-    if (btnSplit && btnMerge && contentSplit && contentMerge) {
-        btnSplit.addEventListener('click', function() {
-            btnSplit.classList.add('active');
-            btnMerge.classList.remove('active');
-            contentSplit.style.display = '';
-            contentMerge.style.display = 'none';
+    if (tabSplit && tabMerge && tabEncrypt && contentSplit && contentMerge && contentEncrypt) {
+        tabSplit.addEventListener('click', function() {
+            setActiveTab(tabSplit, [tabMerge, tabEncrypt]);
+            showContent(contentSplit, [contentMerge, contentEncrypt]);
         });
-        btnMerge.addEventListener('click', function() {
-            btnSplit.classList.remove('active');
-            btnMerge.classList.add('active');
-            contentSplit.style.display = 'none';
-            contentMerge.style.display = '';
+        tabMerge.addEventListener('click', function() {
+            setActiveTab(tabMerge, [tabSplit, tabEncrypt]);
+            showContent(contentMerge, [contentSplit, contentEncrypt]);
+        });
+        tabEncrypt.addEventListener('click', function() {
+            setActiveTab(tabEncrypt, [tabSplit, tabMerge]);
+            showContent(contentEncrypt, [contentSplit, contentMerge]);
         });
     }
 

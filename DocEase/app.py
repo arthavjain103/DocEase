@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, flash, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, send_file, flash, redirect, url_for, send_from_directory , session
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
@@ -12,6 +12,7 @@ import io
 import zipfile
 import sqlite3
 
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 
@@ -37,6 +38,7 @@ def init_db():
             filename TEXT NOT NULL,
             conversion_type TEXT NOT NULL,
             output_file TEXT NOT NULL,
+             user_id INTEGER,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -45,6 +47,71 @@ def init_db():
 
 # Initialize DB at startup
 init_db()
+
+
+# Database migration for users table
+with app.app_context():
+    conn = get_db_connection()
+    conn.execute('''CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    )''')
+    conn.commit()
+    conn.close()
+
+# Database migration for conversions table (add user_id if not exists)
+with app.app_context():
+    conn = get_db_connection()
+    try:
+        conn.execute('ALTER TABLE conversions ADD COLUMN user_id INTEGER')
+    except Exception:
+        pass  # Column may already exist
+    conn.commit()
+    conn.close()
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = generate_password_hash(password)
+        conn = get_db_connection()
+        existing = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        if existing:
+            conn.close()
+            flash('Username already exists.', 'error')
+            return redirect(url_for('register'))
+        conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_password))
+        conn.commit()
+        conn.close()
+        flash('Registration successful. Please log in.', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        conn.close()
+        if user and check_password_hash(user['password'], password):
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            flash('Logged in successfully.', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password.', 'error')
+            return redirect(url_for('login'))
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Logged out successfully.', 'success')
+    return redirect(url_for('login'))
 
 class UploadForm(FlaskForm):
     file = FileField('Select File', validators=[
@@ -310,15 +377,73 @@ def merge_pdfs(pdf_files):
         import traceback
         traceback.print_exc()
         return None
+    
+    
+@app.route('/encrypt', methods=['GET', 'POST'])    
+def encrypt_pdf():
+    if request.method == 'POST':
+        pdf_file = request.files['pdf']
+        password = request.form['password']
+
+        input_path = os.path.join(app.config['UPLOAD_FOLDER'], pdf_file.filename)
+        output_path = os.path.join(app.config['UPLOAD_FOLDER'], f"encrypted_{pdf_file.filename}")
+
+        pdf_file.save(input_path)
+
+        reader = PdfReader(input_path)
+        writer = PdfWriter()
+
+        for page in reader.pages:
+            writer.add_page(page)
+
+        writer.encrypt(password)
+
+        with open(output_path, 'wb') as f:
+            writer.write(f)
+
+        log_conversion(pdf_file.filename, 'encrypt-pdf', output_path)
+        return send_file(output_path, as_attachment=True)
+
+    return render_template('encrypt.html')
+
+
+@app.route('/decrypt', methods=['GET', 'POST'])
+def decrypt_pdf():
+    if request.method == 'POST':
+        pdf_file = request.files['pdf']
+        password = request.form['password']
+
+        input_path = os.path.join(app.config['UPLOAD_FOLDER'], pdf_file.filename)
+        output_path = os.path.join(app.config['UPLOAD_FOLDER'], f"decrypted_{pdf_file.filename}")
+
+        pdf_file.save(input_path)
+
+        reader = PdfReader(input_path)
+
+        if reader.is_encrypted:
+            reader.decrypt(password)
+
+        writer = PdfWriter()
+        for page in reader.pages:
+            writer.add_page(page)
+
+        with open(output_path, 'wb') as f:
+            writer.write(f)
+
+        log_conversion(pdf_file.filename, 'decrypt-pdf', output_path)
+        return send_file(output_path, as_attachment=True)
+
+    return render_template('decrypt.html')
 
 def log_conversion(filename, conversion_type, output_file):
     try:
         output_filename = os.path.basename(output_file)
-        print(f"Logging conversion: {filename}, {conversion_type}, {output_filename}")
+        user_id = session.get('user_id')
+        print(f"Logging conversion: {filename}, {conversion_type}, {output_filename}, user_id={user_id}")
         conn = get_db_connection()
         conn.execute(
-            'INSERT INTO conversions (filename, conversion_type, output_file) VALUES (?, ?, ?)',
-            (filename, conversion_type, output_filename)
+            'INSERT INTO conversions (filename, conversion_type, output_file, user_id) VALUES (?, ?, ?, ?)',
+            (filename, conversion_type, output_filename, user_id)
         )
         conn.commit()
         conn.close()
@@ -326,10 +451,15 @@ def log_conversion(filename, conversion_type, output_file):
     except Exception as e:
         print(f"Error logging conversion: {e}")
 
+# Update /logs to show only current user's logs
 @app.route('/logs')
 def view_logs():
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Please log in to view your history.', 'error')
+        return redirect(url_for('login'))
     conn = get_db_connection()
-    logs = conn.execute('SELECT * FROM conversions ORDER BY timestamp DESC').fetchall()
+    logs = conn.execute('SELECT * FROM conversions WHERE user_id = ? ORDER BY timestamp DESC', (user_id,)).fetchall()
     conn.close()
     return render_template('logs.html', logs=logs)
 
