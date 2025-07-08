@@ -29,7 +29,7 @@
 
 ![Screenshot](DocEase/screenshots/Screenshot11.png)
 
-![Screenshot](DocEase/screenshots/Screenshot3.png)
+![Screenshot](DocEase/screenshots/image.png)
 
 ![Screenshot](DocEase/screenshots/Screenshot2.png)
 
