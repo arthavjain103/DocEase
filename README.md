@@ -1,112 +1,286 @@
 # DocEase: Convert & Edit Your Documents Seamlessly
 
-✨ DocEase is your go-to solution for seamless document handling — convert PDFs, Word docs, and images effortlessly, and edit PDFs with advanced split, merge, and security features. All wrapped in a beautiful, responsive interface built using Tailwind Css and Bootstrap and Gsap animations.
+ **DocEase** is your go-to solution for seamless document handling — convert PDFs, Word docs, and images effortlessly, and edit PDFs with advanced split, merge, and security features. All wrapped in a beautiful, responsive interface built using Tailwind CSS, Bootstrap, and GSAP animations.
+
+**Now with enhanced security, proper logging, and Python 3.10+ support!** 🔒
 
 ---
 
-## 🚀 Features
+## 🌟 Features
 
-- **All-in-One File Converter:**
-  - Convert files between PDF and Word formats seamlessly.
-  - Quickly transform images (JPG, PNG) into PDF documents.
-- **Powerful PDF Editor:**
-  - **Split PDF:** Extract specific pages or split entire PDFs into individual files. Outputs can be downloaded as separate PDFs or bundled in a ZIP file.
-  - **Merge PDF:** Combine multiple PDF documents into a single, organized file in seconds.
-  - **Encrypt PDF:** Secure your PDF files with a password — required for opening the file.
-  - **Decrypt PDF:** Remove passwords from encrypted PDF files (with correct password provided).
-- **Conversion History:**
-  - Every conversion or PDF operation is logged automatically. The app provides a dedicated History page where you can review past actions and re-download files if needed.
-- **Modern UI:**
-  - Clean, responsive, and easy-to-navigate interface built with Bootstrap, Tailwind CSS, and custom styles. Works smoothly across desktop and mobile devices, with intuitive layouts and subtle animations.
-- **Privacy-Focused:**
-  - All file processing happens locally on your system. No files are uploaded to external servers — ensuring your documents remain private and secure.
-- **Fast & Reliable:**
-  - Optimized for quick processing so you can convert or edit files without delays. Lightweight dependencies ensure stability and performance even on lower-end machines.
+### 🔄 All-in-One File Converter
+
+- Convert PDF ↔ Word (DOCX) seamlessly
+- Transform images (JPG, PNG) into PDF documents
+- Fast and reliable conversion with proper error handling
+
+### 📑 Powerful PDF Editor
+
+- **Split PDF:** Extract specific pages or split entire PDFs into individual files
+  - Outputs can be downloaded as separate PDFs or bundled in a ZIP file
+- **Merge PDF:** Combine multiple PDF documents into a single, organized file
+- **Encrypt PDF:** Secure your PDF files with password protection
+- **Decrypt PDF:** Remove passwords from encrypted PDF files
+
+### 📋 Conversion History
+
+- Every conversion or PDF operation is logged automatically
+- Dedicated History page to review past actions
+- Re-download files whenever needed
+- User-specific conversion tracking
+
+###  Modern UI/UX
+
+- Clean, responsive interface with glassmorphism design
+- Built with Bootstrap 5, Tailwind CSS, and GSAP animations
+- Works smoothly on desktop and mobile devices
+- Intuitive layouts with smooth transitions
+
+### Privacy-Focused & Secure
+
+- **Local Processing:** All file processing happens on your system
+- **No Cloud Upload:** Your documents never leave your computer
+- **CSRF Protection:** All forms protected with security tokens
+- **Secure Sessions:** HTTPONLY and SameSite cookie protection
+- **Path Validation:** Protection against directory traversal attacks
+
+### ⚡ Fast & Reliable
+
+- Optimized for quick processing
+- Automatic temporary file cleanup
+- Lightweight, stable dependencies
+- Comprehensive error logging
 
 ---
 
-## 🖼️ Demo
+## Security 
+
+✅ **CSRF Protection** - All sensitive operations protected with tokens  
+✅ **Environment-Based Config** - Secrets in .env, not in code  
+✅ **Structured Logging** - Full audit trail of operations  
+✅ **Session Security** - HTTPONLY and SameSite cookies  
+✅ **File Validation** - Path traversal and extension validation  
+✅ **Automatic Cleanup** - Temporary files cleaned up on shutdown  
+✅ **Python 3.10+ Support** - Full compatibility with modern Python
+
+---
+
+## 🖼️ Demo Screenshots
 
 ![Screenshot](DocEase/screenshots/Screenshot11.png)
-
 ![Screenshot](DocEase/screenshots/image.png)
-
 ![Screenshot](DocEase/screenshots/Screenshot2.png)
 
 ---
 
 ## 🧭 User Flow
 
-1. **Landing Page:** Welcome screen with Get Started button
-2. **Choose Action:** Convert files or edit PDFs
-3. **Upload Files:** Select and upload your files
-4. **Process:** Download your converted, encrypted, or edited document
-5. **History:** View/download your personal past conversions
+1. **Landing Page** - Welcome screen with Get Started button
+2. **Choose Action** - Select: Convert Files or Edit PDFs
+3. **Upload Files** - Select and upload your documents
+4. **Process** - Download your converted, encrypted, or edited file
+5. **History** - View/download your personal conversion history
 
 ---
 
-## ⚙️ Getting Started
+## Getting Started
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/DocEase.git
-   cd DocEase
-   ```
-2. **Create and activate a virtual environment (recommended):**
-   ```bash
-   python -m venv venv
-   # Windows:
-   venv\Scripts\activate
-   # macOS/Linux:
-   source venv/bin/activate
-   ```
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. **Run the app:**
-   ```bash
-   python app.py
-   ```
-5. **Visit:** [http://127.0.0.1:5000](http://127.0.0.1:5000)
+### Prerequisites
+
+- Python 3.8+ (Python 3.10+ recommended for full compatibility)
+- pip package manager
+- Virtual environment (recommended)
+
+### Installation
+
+#### 1. Clone the Repository
+
+```bash
+git clone https://github.com/arthavjain103/DocEase.git
+cd DocEase
+```
+
+#### 2. Create Virtual Environment
+
+**Windows:**
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
+```
+
+#### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+#### 4. Configure Environment Variables
+
+The `.env` file is already created with default values. For production, update it:
+
+```bash
+# Edit .env file
+FLASK_ENV=development
+SECRET_KEY=your-secret-key-change-in-production
+UPLOAD_FOLDER=uploads
+MAX_UPLOAD_SIZE=40
+```
+
+To generate a secure SECRET_KEY:
+
+```bash
+python -c "import os; print(os.urandom(24).hex())"
+```
+
+#### 5. Run the Application
+
+```bash
+python app.py
+```
+
+#### 6. Access the Application
+
+Open your browser and visit: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-## 📂 File Storage
+## � Project Structure
 
-- Files are saved temporarily in `uploads/`
-- Conversion logs are stored in `conversions.db` (SQLite)
-
----
-
-## 🏗️ Tech Stack
-
-- **Flask:** Web framework for backend and routing
-- **WTForms / Flask-WTF:** Secure forms and file uploads
-- **PyPDF2:** PDF split/merge operations,encrypt, and decrypt operations
-- **pdf2docx / docx2pdf:** PDF ↔ Word conversion
-- **Pillow:** Image to PDF conversion
-- **Bootstrap 5 + Tailwind CSS:** Responsive, modern UI
-- **GSAP:** Smooth homepage and UI animations
-- **SQLite3:** Local database for conversion logs
-
----
-
-## 🎨 Customization
-
-- **Styles:** Edit `static/style.css` for custom styles
-- **Templates:** Modify HTML files in `templates/` for UI changes
-
----
-
-## 🙏 Credits
-
-- Animations by GSAP library
-- Icons from Bootstrap Icons and Font Awesome
-- UI inspired by modern glassmorphism and Tailwind/Bootstrap themes
+```
+DocEase/
+├── app.py                          # Main Flask application
+├── config.py                       # Configuration management
+├── security.py                     # Security utilities
+├── forms.py                        # CSRF-protected forms
+├── compatibility.py                # Python 3.10+ compatibility
+├── requirements.txt                # Python dependencies
+├── .env                           # Environment variables (keep secret!)
+├── conversions.db                 # SQLite database (auto-created)
+├── uploads/                       # Temporary file storage
+├── templates/
+│   ├── base.html                 # Base template
+│   ├── home.html                 # Homepage
+│   ├── login.html                # Login page
+│   ├── register.html             # Registration page
+│   ├── converter.html            # File converter
+│   ├── pdf_editor.html           # PDF editor
+│   ├── encrypt.html              # PDF encryption
+│   ├── decrypt.html              # PDF decryption
+│   └── logs.html                 # Conversion history
+├── static/
+│   ├── style.css                 # Custom styles
+│   └── js/
+│       └── main.js               # JavaScript functionality
+└── screenshots/                  # Demo screenshots
+```
 
 ---
 
-## 📄 License
+## 🛠️ Tech Stack
+
+### Backend
+
+- **Flask** (2.3.3) - Web framework
+- **Flask-WTF** (1.1.1) - Secure forms with CSRF protection
+- **Flask-Login** (0.6.3) - User session management
+- **Flask-SQLAlchemy** (3.1.1) - Database ORM
+
+### File Processing
+
+- **PyPDF2** (3.0.1) - PDF operations (merge, split, encrypt, decrypt)
+- **pdf2docx** (0.5.8) - PDF to Word conversion
+- **docx2pdf** (0.5.1) - Word to PDF conversion
+- **Pillow** (10.1.0) - Image processing
+
+### Frontend
+
+- **Bootstrap 5** - Responsive UI framework
+- **Tailwind CSS** - Utility-first CSS
+- **GSAP** - Smooth animations
+- **Bootstrap Icons** - Icon library
+
+### Database
+
+- **SQLite3** - Local database for logs
+
+### Security
+
+- **Werkzeug** (2.3.7) - Password hashing and security
+- **python-dotenv** (1.0.0) - Environment variable management
+
+---
+
+## 🔒 Security Features
+
+### CSRF Protection
+
+All forms are protected with CSRF tokens via Flask-WTF:
+
+- `/register` - Registration form
+- `/login` - Login form
+- `/encrypt` - PDF encryption
+- `/decrypt` - PDF decryption
+- `/file-converter` - File conversion
+- `/pdf-editor` - PDF operations
+
+### Session Security
+
+- HTTPOnly cookies - Prevents JavaScript access to session
+- SameSite=Lax - Prevents CSRF attacks
+- Secure flag - Set to True in production with HTTPS
+
+### File Validation
+
+- Extension whitelist validation
+- Path traversal attack prevention
+- File size enforcement
+- Magic byte verification for PDFs
+
+### Configuration Management
+
+- Sensitive data stored in `.env` (not committed to git)
+- Environment-specific configurations
+- Secure defaults for production
+
+---
+
+## 📊 Logging & Monitoring
+
+The application includes comprehensive logging:
+
+```
+2025-11-14 10:30:45,123 - app - INFO - Starting conversion: pdf-to-word
+2025-11-14 10:30:46,456 - app - DEBUG - PDF loaded successfully
+2025-11-14 10:30:47,789 - app - INFO - Conversion successful: output.docx
+```
+
+
+##  Automatic Cleanup
+
+The application automatically cleans up temporary files:
+
+- Temporary files cleaned on application shutdown
+- Prevents disk space accumulation
+- All cleanup operations logged
+
+---
+
+
+
+
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+
+## Credits
+
+- **GSAP** - Smooth animations library
+- **Bootstrap** - Responsive UI framework
+- **Tailwind CSS** - Utility-first CSS framework
+- **Bootstrap Icons** - Icon library
+- **PyPDF2** - PDF manipulation library
+- **pdf2docx** - PDF to Word conversion
+
