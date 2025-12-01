@@ -51,7 +51,7 @@ def init_converter_routes(app, UploadForm, allowed_file, validate_upload_path, v
 
             output_path = convert_file(save_path, conversion_type)
 
-            if output_path:
+            if output_path and os.path.isfile(output_path):
                 log_conversion(filename, conversion_type, output_path)
                 logger.info(f"Conversion successful: {filename} → {os.path.basename(output_path)}")
                 return send_file(output_path, as_attachment=True)
