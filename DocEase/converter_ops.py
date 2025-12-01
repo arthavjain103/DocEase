@@ -31,8 +31,8 @@ def convert_file(file_path, conversion_type):
                 logger.info(f"Word to PDF conversion successful: {output_path}")
             except Exception as e:
                 # This usually fails on Linux/Render since MS Word isn't installed
-                logger.warning(f"Word to PDF not available in this deployment: {str(e)}")
-                return "Word to PDF conversion not available in this deployment."
+                logger.info(f"Word to PDF not available in this deployment: {str(e)}")
+                
             
         elif conversion_type == 'image-to-pdf':
             output_path += '.pdf'
