@@ -51,6 +51,12 @@ def init_converter_routes(app, UploadForm, allowed_file, validate_upload_path, v
 
             output_path = convert_file(save_path, conversion_type)
 
+            # Check for deployment limitation marker
+            if output_path == 'NOT_AVAILABLE_ON_DEPLOYMENT':
+                logger.warning(f"Word to PDF conversion not available on this deployment: {filename}")
+                flash('Word to PDF conversion is not available on this deployment.', 'warning')
+                return redirect(url_for('upload_file'))
+
             if output_path and os.path.isfile(output_path):
                 log_conversion(filename, conversion_type, output_path)
                 logger.info(f"Conversion successful: {filename} → {os.path.basename(output_path)}")
