@@ -27,27 +27,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const tabMerge = document.getElementById('tab-merge');
     const tabEncrypt = document.getElementById('tab-encrypt');
     const tabDecrypt = document.getElementById('tab-decrypt');
+    const tabWatermark = document.getElementById('tab-watermark');
     const contentSplit = document.getElementById('content-split');
     const contentMerge = document.getElementById('content-merge');
     const contentEncrypt = document.getElementById('content-encrypt');
     const contentDecrypt = document.getElementById('content-decrypt');
+    const contentWatermark = document.getElementById('content-watermark');
 
-    if (tabSplit && tabMerge && tabEncrypt && tabDecrypt && contentSplit && contentMerge && contentEncrypt && contentDecrypt) {
+    if (tabSplit && tabMerge && tabEncrypt && tabDecrypt && tabWatermark && contentSplit && contentMerge && contentEncrypt && contentDecrypt && contentWatermark) {
         tabSplit.addEventListener('click', function() {
-            setActiveTab(tabSplit, [tabMerge, tabEncrypt, tabDecrypt]);
-            showContent(contentSplit, [contentMerge, contentEncrypt, contentDecrypt]);
+            setActiveTab(tabSplit, [tabMerge, tabEncrypt, tabDecrypt, tabWatermark]);
+            showContent(contentSplit, [contentMerge, contentEncrypt, contentDecrypt, contentWatermark]);
         });
         tabMerge.addEventListener('click', function() {
-            setActiveTab(tabMerge, [tabSplit, tabEncrypt, tabDecrypt]);
-            showContent(contentMerge, [contentSplit, contentEncrypt, contentDecrypt]);
+            setActiveTab(tabMerge, [tabSplit, tabEncrypt, tabDecrypt, tabWatermark]);
+            showContent(contentMerge, [contentSplit, contentEncrypt, contentDecrypt, contentWatermark]);
         });
         tabEncrypt.addEventListener('click', function() {
-            setActiveTab(tabEncrypt, [tabSplit, tabMerge, tabDecrypt]);
-            showContent(contentEncrypt, [contentSplit, contentMerge, contentDecrypt]);
+            setActiveTab(tabEncrypt, [tabSplit, tabMerge, tabDecrypt, tabWatermark]);
+            showContent(contentEncrypt, [contentSplit, contentMerge, contentDecrypt, contentWatermark]);
         });
         tabDecrypt.addEventListener('click', function() {
-            setActiveTab(tabDecrypt, [tabSplit, tabMerge, tabEncrypt]);
-            showContent(contentDecrypt, [contentSplit, contentMerge, contentEncrypt]);
+            setActiveTab(tabDecrypt, [tabSplit, tabMerge, tabEncrypt, tabWatermark]);
+            showContent(contentDecrypt, [contentSplit, contentMerge, contentEncrypt, contentWatermark]);
+        });
+        tabWatermark.addEventListener('click', function() {
+            setActiveTab(tabWatermark, [tabSplit, tabMerge, tabEncrypt, tabDecrypt]);
+            showContent(contentWatermark, [contentSplit, contentMerge, contentEncrypt, contentDecrypt]);
         });
     }
 

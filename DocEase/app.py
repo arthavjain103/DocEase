@@ -32,12 +32,12 @@ from security import (
 )
 
 # Import forms
-from forms import UploadFileForm as UploadForm, EncryptPDFForm, DecryptPDFForm, RegisterForm, LoginForm
+from forms import UploadFileForm as UploadForm, EncryptPDFForm, DecryptPDFForm, WatermarkPDFForm, RegisterForm, LoginForm
 
 # Import converter and PDF operations
 # Import converter and PDF operations
 from converter_ops import convert_file, log_conversion
-from pdf_ops import PDFOperations, EncryptOps, DecryptOps
+from pdf_ops import PDFOperations, EncryptOps, DecryptOps, WatermarkOps
 
 # Configure logging
 logging.basicConfig(
@@ -118,7 +118,7 @@ init_pdf_editor_routes(
     app, get_db_connection, UploadForm, EncryptPDFForm, DecryptPDFForm,
     allowed_file, validate_upload_path, validate_file_size, is_valid_pdf,
     PDF_EDITOR_EXTENSIONS, split_pdf, merge_pdfs, convert_file, log_conversion,
-    EncryptOps, DecryptOps
+    EncryptOps, DecryptOps, WatermarkOps, WatermarkPDFForm
 )
 
 init_utility_routes(app, get_db_connection)

@@ -3,6 +3,9 @@ import os
 import zipfile
 import logging
 from PyPDF2 import PdfReader, PdfWriter
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from io import BytesIO
 import uuid
 
 logger = logging.getLogger(__name__)
@@ -181,3 +184,37 @@ class DecryptOps:
         except Exception as e:
             logger.error(f"PDF decryption error: {str(e)}")
             return False, str(e)
+        
+class WatermarkOps:
+    @staticmethod
+    def add_text_watermark(input_path, output_path, text, opacity=0.2):
+        try:
+            from PyPDF2 import PdfReader, PdfWriter
+            from reportlab.pdfgen import canvas
+            from reportlab.lib.pagesizes import A4
+            import io
+
+            reader = PdfReader(input_path)
+            writer = PdfWriter()
+
+            packet = io.BytesIO()
+            c = canvas.Canvas(packet, pagesize=A4)
+            c.setFillAlpha(opacity)
+            c.setFont("Helvetica-Bold", 40)
+            c.drawCentredString(300, 400, text)
+            c.save()
+
+            packet.seek(0)
+            watermark = PdfReader(packet).pages[0]
+
+            for page in reader.pages:
+                page.merge_page(watermark)
+                writer.add_page(page)
+
+            with open(output_path, "wb") as f:
+                writer.write(f)
+
+            return True
+        except Exception as e:
+            logger.error(f"WatermarkOps error: {str(e)}")
+            return False

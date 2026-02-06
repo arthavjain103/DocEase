@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 def init_pdf_editor_routes(app, get_db_connection, UploadForm, EncryptPDFForm, DecryptPDFForm,
                            allowed_file, validate_upload_path, validate_file_size, is_valid_pdf,
                            PDF_EDITOR_EXTENSIONS, split_pdf, merge_pdfs, convert_file, log_conversion,
-                           EncryptOps, DecryptOps):
+                           EncryptOps, DecryptOps, WatermarkOps, WatermarkPDFForm):
     """Initialize PDF editor routes"""
     
     @app.route('/pdf-editor', methods=['GET', 'POST'])
@@ -281,3 +281,80 @@ def init_pdf_editor_routes(app, get_db_connection, UploadForm, EncryptPDFForm, D
                 return redirect(url_for('decrypt_pdf'))
 
         return render_template('decrypt.html', form=form)
+    @app.route('/watermark', methods=['GET', 'POST'])
+    def watermark_pdf():
+        form = WatermarkPDFForm()
+        
+        if form.validate_on_submit():
+            try:
+                pdf_file = form.pdf.data
+                watermark_text = form.watermark_text.data
+                opacity_str = form.opacity.data
+                
+                # Validate opacity value
+                try:
+                    opacity = float(opacity_str)
+                    if opacity < 0.0 or opacity > 1.0:
+                        flash('Opacity must be between 0.0 and 1.0', 'error')
+                        return redirect(url_for('watermark_pdf'))
+                except ValueError:
+                    flash('Invalid opacity value. Please enter a decimal number between 0.0 and 1.0', 'error')
+                    return redirect(url_for('watermark_pdf'))
+                
+                # Watermark only works with PDF files
+                if not allowed_file(pdf_file.filename, PDF_EDITOR_EXTENSIONS):
+                    logger.warning(f"Invalid file type for watermarking: {pdf_file.filename}")
+                    flash('Invalid file type. Only PDF files allowed.', 'error')
+                    return redirect(url_for('watermark_pdf'))
+
+                filename = pdf_file.filename
+                
+                # Validate upload path
+                try:
+                    input_path = validate_upload_path(filename, app.config['UPLOAD_FOLDER'])
+                except ValueError as e:
+                    logger.error(f"Path validation failed: {str(e)}")
+                    flash(str(e), 'error')
+                    return redirect(url_for('watermark_pdf'))
+                
+                output_path = os.path.join(app.config['UPLOAD_FOLDER'], f"watermarked_{__import__('werkzeug.utils', fromlist=['secure_filename']).secure_filename(filename)}")
+
+                pdf_file.save(input_path)
+                
+                # Validate file size
+                if not validate_file_size(input_path, app.config['MAX_CONTENT_LENGTH']):
+                    os.remove(input_path)
+                    logger.warning(f"File too large: {filename}")
+                    flash("File too large.", "error")
+                    return redirect(url_for('watermark_pdf'))
+                
+                # Validate PDF integrity
+                if not is_valid_pdf(input_path):
+                    os.remove(input_path)
+                    logger.warning(f"Invalid PDF file: {filename}")
+                    flash("Invalid or corrupted PDF file.", "error")
+                    return redirect(url_for('watermark_pdf'))
+                
+                # Use WatermarkOps class
+                result = WatermarkOps.add_text_watermark(input_path, output_path, watermark_text, opacity)
+                
+                if result:
+                    log_conversion(filename, 'watermark-pdf', output_path)
+                    logger.info(f"PDF watermarked successfully: {output_path}")
+                    # Clean up original uploaded file
+                    try:
+                        os.remove(input_path)
+                        logger.debug(f"Cleaned up: {input_path}")
+                    except Exception as e:
+                        logger.error(f"Failed to clean up file {input_path}: {str(e)}")
+                    return send_file(output_path, as_attachment=True)
+                else:
+                    flash('Watermarking failed.', 'error')
+                    return redirect(url_for('watermark_pdf'))
+                
+            except Exception as e:
+                logger.error(f"PDF watermarking error: {str(e)}")
+                flash(f'Watermarking failed: {str(e)}', 'error')
+                return redirect(url_for('watermark_pdf'))
+
+        return render_template('watermark.html', form=form)

@@ -1,0 +1,87 @@
+{% extends "base.html" %} {% block title %}DocEase - Add Watermark{% endblock %}
+{% block head %}
+<style>
+  .form-label,
+  .form-control {
+    color: #e2e8f0;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid #334155;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .form-control:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 0.2rem #6366f155;
+    background: rgba(30, 41, 59, 0.7);
+    color: #fff;
+  }
+  .alert {
+    border-radius: 1rem;
+    background: rgba(99, 102, 241, 0.08);
+    color: #fff;
+    border: 1px solid #6366f1;
+  }
+</style>
+{% endblock %} {% block content %}
+<main
+  class="container flex-grow-1"
+  style="padding-top: 120px; max-width: 600px"
+>
+  <div class="card-glass p-4">
+    <div class="text-center mb-4">
+      <h1
+        class="h3 fw-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-400 mb-2"
+      >
+        Add Watermark to PDF
+      </h1>
+      <p class="text-slate-400 mb-0">
+        Add text watermark to protect your documents.
+      </p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+
+      <div class="mb-3">
+        {{ form.pdf.label(class="form-label") }} {{
+        form.pdf(class="form-control", accept=".pdf") }} {% if form.pdf.errors
+        %} {% for error in form.pdf.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %} {% endif %}
+      </div>
+
+      <div class="mb-3">
+        {{ form.watermark_text.label(class="form-label") }} {{
+        form.watermark_text(class="form-control", placeholder="e.g.,
+        CONFIDENTIAL") }} {% if form.watermark_text.errors %} {% for error in
+        form.watermark_text.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %} {% endif %}
+      </div>
+
+      <div class="mb-3">
+        {{ form.opacity.label(class="form-label") }} {{
+        form.opacity(class="form-control", type="number", min="0", max="1",
+        step="0.1") }}
+        <small class="text-slate-400"
+          >0.0 = Invisible, 1.0 = Solid (Default: 0.2)</small
+        >
+        {% if form.opacity.errors %} {% for error in form.opacity.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %} {% endif %}
+      </div>
+
+      <div class="alert alert-info mb-3">
+        <i class="bi bi-info-circle"></i>
+        Add a centered text watermark to all pages of your PDF. The watermark
+        will appear with adjustable opacity to protect your document while
+        keeping it readable.
+      </div>
+
+      {{ form.submit(class="btn btn-custom w-100") }}
+    </form>
+  </div>
+</main>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

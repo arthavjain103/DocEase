@@ -35,6 +35,19 @@ class DecryptPDFForm(FlaskForm):
     submit = SubmitField('Decrypt PDF')
 
 
+class WatermarkPDFForm(FlaskForm):
+    pdf = FileField('Select PDF File', validators=[
+        FileRequired(),
+        FileAllowed({'pdf'}, 'Only PDF files allowed!')
+    ])
+    watermark_text = StringField('Watermark Text', validators=[
+        DataRequired(),
+        Length(min=1, max=50, message='Watermark text must be between 1 and 50 characters')
+    ])
+    opacity = StringField('Opacity (0.0-1.0)', default='0.2')
+    submit = SubmitField('Add Watermark')
+
+
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[
         DataRequired(),
