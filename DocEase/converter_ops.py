@@ -6,6 +6,7 @@ from docx2pdf import convert as word_to_pdf_convert
 from PIL import Image
 from database import get_db_connection
 from flask import session
+from pdf_ops import CSVToPDFOps
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,15 @@ def convert_file(file_path, conversion_type):
                 image = image.convert('RGB')
             image.save(output_path, 'PDF', resolution=100.0)
             logger.info(f"Image to PDF conversion successful: {output_path}")
+        
+        elif conversion_type == 'csv-to-pdf':
+            output_path += '.pdf'
+            result = CSVToPDFOps.convert(file_path, output_path)
+            if not result:
+                logger.error(f"CSV to PDF conversion failed for: {file_path}")
+                return None
+            logger.info(f"CSV to PDF conversion successful: {output_path}")
+        
         else:
             logger.error(f"Unknown conversion type: {conversion_type}")
             return None

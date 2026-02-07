@@ -1,5 +1,6 @@
 """PDF Editor routes - Merge, Split, Encrypt, Decrypt"""
 from flask import render_template, request, flash, redirect, url_for, send_file
+from werkzeug.utils import secure_filename
 import os
 import logging
 
@@ -9,7 +10,7 @@ logger = logging.getLogger(__name__)
 def init_pdf_editor_routes(app, get_db_connection, UploadForm, EncryptPDFForm, DecryptPDFForm,
                            allowed_file, validate_upload_path, validate_file_size, is_valid_pdf,
                            PDF_EDITOR_EXTENSIONS, split_pdf, merge_pdfs, convert_file, log_conversion,
-                           EncryptOps, DecryptOps, WatermarkOps, WatermarkPDFForm):
+                           EncryptOps, DecryptOps, WatermarkOps, WatermarkPDFForm, RotateOps, RotatePDFForm):
     """Initialize PDF editor routes"""
     
     @app.route('/pdf-editor', methods=['GET', 'POST'])
@@ -358,3 +359,51 @@ def init_pdf_editor_routes(app, get_db_connection, UploadForm, EncryptPDFForm, D
                 return redirect(url_for('watermark_pdf'))
 
         return render_template('watermark.html', form=form)
+    
+    @app.route('/rotate-pdf', methods=['GET', 'POST'])
+    def rotate_pdf():
+        form = RotatePDFForm()
+
+        if form.validate_on_submit():
+            try:
+                pdf_file = form.pdf.data
+                angle = int(form.angle.data)
+
+                if not allowed_file(pdf_file.filename, PDF_EDITOR_EXTENSIONS):
+                    flash("Only PDF files are allowed", "error")
+                    return redirect(url_for('rotate_pdf'))
+
+                filename = secure_filename(pdf_file.filename)
+                input_path = validate_upload_path(filename, app.config['UPLOAD_FOLDER'])
+                output_path = os.path.join(
+                    app.config['UPLOAD_FOLDER'],
+                    f"rotated_{filename}"
+                )
+
+                pdf_file.save(input_path)
+
+                if not is_valid_pdf(input_path):
+                    os.remove(input_path)
+                    flash("Invalid PDF file", "error")
+                    return redirect(url_for('rotate_pdf'))
+
+                result = RotateOps.rotate(input_path, output_path, angle)
+
+                if result:
+                    log_conversion(filename, 'rotate-pdf', output_path)
+                    # Clean up input file
+                    try:
+                        os.remove(input_path)
+                    except Exception as e:
+                        logger.error(f"Failed to remove input file: {str(e)}")
+                    return send_file(output_path, as_attachment=True)
+
+                flash("PDF rotation failed", "error")
+                return redirect(url_for('rotate_pdf'))
+
+            except Exception as e:
+                logger.error(str(e))
+                flash(str(e), "error")
+                return redirect(url_for('rotate_pdf'))
+
+        return render_template('rotate.html', form=form)

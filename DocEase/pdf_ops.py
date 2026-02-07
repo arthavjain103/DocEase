@@ -1,10 +1,11 @@
-"""PDF Operations - Split, Merge, Encrypt, Decrypt"""
+"""PDF Operations - Split, Merge, Encrypt, Decrypt, Watermark, Rotate"""
 import os
 import zipfile
 import logging
+import csv
 from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import letter, A4
 from io import BytesIO
 import uuid
 
@@ -217,4 +218,56 @@ class WatermarkOps:
             return True
         except Exception as e:
             logger.error(f"WatermarkOps error: {str(e)}")
+            return False
+
+class RotateOps:
+
+    @staticmethod
+    def rotate(input_path, output_path, angle):
+        try:
+            reader = PdfReader(input_path)
+            writer = PdfWriter()
+
+            for page in reader.pages:
+                page.rotate(angle)
+                writer.add_page(page)
+
+            with open(output_path, "wb") as f:
+                writer.write(f)
+
+            return True
+        except Exception:
+            return False
+
+
+class CSVToPDFOps:
+    """CSV to PDF conversion operations"""
+    
+    @staticmethod
+    def convert(csv_path, pdf_path):
+        """Convert CSV file to PDF"""
+        try:
+            logger.info(f"Starting CSV to PDF conversion: {os.path.basename(csv_path)}")
+            
+            c = canvas.Canvas(pdf_path, pagesize=A4)
+            width, height = A4
+            
+            y = height - 40
+            
+            with open(csv_path, newline='', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    text = " | ".join(row)
+                    c.drawString(40, y, text)
+                    y -= 20
+                    
+                    if y < 40:
+                        c.showPage()
+                        y = height - 40
+            
+            c.save()
+            logger.info(f"CSV to PDF conversion successful: {pdf_path}")
+            return True
+        except Exception as e:
+            logger.error(f"CSV to PDF conversion error: {str(e)}")
             return False

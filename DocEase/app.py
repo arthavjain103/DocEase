@@ -32,12 +32,12 @@ from security import (
 )
 
 # Import forms
-from forms import UploadFileForm as UploadForm, EncryptPDFForm, DecryptPDFForm, WatermarkPDFForm, RegisterForm, LoginForm
+from forms import UploadFileForm as UploadForm, EncryptPDFForm, DecryptPDFForm, WatermarkPDFForm, RotatePDFForm, RegisterForm, LoginForm
 
 # Import converter and PDF operations
 # Import converter and PDF operations
 from converter_ops import convert_file, log_conversion
-from pdf_ops import PDFOperations, EncryptOps, DecryptOps, WatermarkOps
+from pdf_ops import PDFOperations, EncryptOps, DecryptOps, WatermarkOps, RotateOps
 
 # Configure logging
 logging.basicConfig(
@@ -53,7 +53,10 @@ app = Flask(__name__)
 
 # Configuration
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', os.urandom(24).hex())
-UPLOAD_FOLDER = "/tmp/docease_uploads"
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
+
+if not os.path.isabs(UPLOAD_FOLDER):
+    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), UPLOAD_FOLDER)
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -118,7 +121,7 @@ init_pdf_editor_routes(
     app, get_db_connection, UploadForm, EncryptPDFForm, DecryptPDFForm,
     allowed_file, validate_upload_path, validate_file_size, is_valid_pdf,
     PDF_EDITOR_EXTENSIONS, split_pdf, merge_pdfs, convert_file, log_conversion,
-    EncryptOps, DecryptOps, WatermarkOps, WatermarkPDFForm
+    EncryptOps, DecryptOps, WatermarkOps, WatermarkPDFForm, RotateOps, RotatePDFForm
 )
 
 init_utility_routes(app, get_db_connection)
@@ -129,4 +132,5 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(environ.get("PORT", 5000)),
+        debug=True
     )

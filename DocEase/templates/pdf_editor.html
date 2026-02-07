@@ -53,13 +53,24 @@ block head %}
       </h1>
       <p class="text-slate-400 mb-0">Choose a PDF operation below.</p>
     </div>
-    <div class="d-flex justify-content-center mb-4">
-      <button class="tab-btn active" id="tab-split">Split PDF</button>
-      <button class="tab-btn" id="tab-merge">Merge PDF</button>
-      <button class="tab-btn" id="tab-encrypt">Encrypt PDF</button>
-      <button class="tab-btn" id="tab-decrypt">Decrypt PDF</button>
-      <button class="tab-btn" id="tab-watermark">Watermark</button>
-    </div>
+    <div class="tabs-container flex-column">
+
+  <!-- Row 1 -->
+  <div class="d-flex justify-content-center gap-2 mb-2">
+    <button class="tab-btn active" id="tab-split">Split PDF</button>
+    <button class="tab-btn" id="tab-merge">Merge PDF</button>
+    <button class="tab-btn" id="tab-encrypt">Encrypt PDF</button>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="d-flex justify-content-center gap-2 mb-2">
+    <button class="tab-btn" id="tab-decrypt">Decrypt PDF</button>
+    <button class="tab-btn" id="tab-watermark">Watermark</button>
+    <button class="tab-btn" id="tab-rotate">Rotate</button>
+  </div>
+
+</div>
+
     <div id="content-split">
       <form method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
@@ -126,6 +137,7 @@ block head %}
     </div>
     <div id="content-encrypt" style="display: none">
       <form method="post" action="/encrypt" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
         <div class="mb-3">
           <label class="form-label">Select PDF File</label>
           <input
@@ -155,6 +167,7 @@ block head %}
     </div>
     <div id="content-decrypt" style="display: none">
       <form method="post" action="/decrypt" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
         <div class="mb-3">
           <label class="form-label">Select Encrypted PDF File</label>
           <input
@@ -184,6 +197,7 @@ block head %}
     </div>
     <div id="content-watermark" style="display: none">
       <form method="post" action="/watermark" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
         <div class="mb-3">
           <label class="form-label">Select PDF File</label>
           <input
@@ -227,6 +241,37 @@ block head %}
         <button type="submit" class="btn btn-custom w-100">
           Add Watermark
         </button>
+      </form>
+    </div>
+    <div id="content-rotate" style="display: none">
+      <form method="post" action="/rotate-pdf" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          <label class="form-label">Select PDF File</label>
+          <input
+            type="file"
+            name="pdf"
+            class="form-control"
+            accept=".pdf"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Rotation Angle (degrees)</label>
+          <input
+            type="number"
+            name="angle"
+            class="form-control"
+            value="90"
+            required
+          />
+          <small class="text-slate-400">Use 90, 180, 270, -90, etc.</small>
+        </div>
+        <div class="alert alert-info mb-3">
+          <i class="bi bi-info-circle"></i>
+          Rotate all pages in your PDF. Common angles: 90° (clockwise), 180° (flip), 270° (counter-clockwise).
+        </div>
+        <button type="submit" class="btn btn-custom w-100">Rotate PDF</button>
       </form>
     </div>
   </div>

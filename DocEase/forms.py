@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 class UploadFileForm(FlaskForm):
     file = FileField('Select File', validators=[
         FileRequired(),
-        FileAllowed({'pdf', 'docx', 'doc', 'jpg', 'jpeg', 'png'}, 'Invalid file type!')
+        FileAllowed({'pdf', 'docx', 'doc', 'jpg', 'jpeg', 'png', 'csv'}, 'Invalid file type!')
     ])
     submit = SubmitField('Convert')
 
@@ -46,6 +46,15 @@ class WatermarkPDFForm(FlaskForm):
     ])
     opacity = StringField('Opacity (0.0-1.0)', default='0.2')
     submit = SubmitField('Add Watermark')
+
+
+class RotatePDFForm(FlaskForm):
+    pdf = FileField('Select PDF File', validators=[
+        FileRequired(),
+        FileAllowed({'pdf'}, 'Only PDF files allowed!')
+    ])
+    angle = StringField('Rotation Angle (degrees)', default='90')
+    submit = SubmitField('Rotate PDF')
 
 
 class RegisterForm(FlaskForm):

@@ -5,7 +5,8 @@ from werkzeug.utils import secure_filename
 PDF_EXTENSIONS = {'pdf'}
 WORD_EXTENSIONS = {'docx', 'doc'}
 IMAGE_EXTENSIONS = {'jpg', 'jpeg', 'png'}
-CONVERTER_EXTENSIONS = {'pdf', 'docx', 'doc', 'jpg', 'jpeg', 'png'}
+CSV_EXTENSIONS = {'csv'}
+CONVERTER_EXTENSIONS = {'pdf', 'docx', 'doc', 'jpg', 'jpeg', 'png', 'csv'}
 PDF_EDITOR_EXTENSIONS = {'pdf'}  # PDF editor only works with PDFs
 
 
